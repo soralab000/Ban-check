@@ -53,9 +53,9 @@ class MusicController {
     fun play() { wantPlay = true; if (prepared) { player?.start(); isPlaying = true } }
     fun pause() { wantPlay = false; if (prepared && player?.isPlaying == true) player?.pause(); isPlaying = false }
     fun toggle() { if (isPlaying) pause() else play() }
-    fun setVolume(v: Float) { volume = v; applyVolume() }
-    fun setMuted(m: Boolean) { muted = m; applyVolume() }
-    fun setLoop(l: Boolean) { loop = l; player?.isLooping = l }
+    fun changeVolume(v: Float) { volume = v; applyVolume() }
+    fun changeMuted(m: Boolean) { muted = m; applyVolume() }
+    fun changeLoop(l: Boolean) { loop = l; player?.isLooping = l }
     private fun applyVolume() { val x = if (muted) 0f else volume; player?.setVolume(x, x) }
 
     fun onStop(keepPlaying: Boolean) { if (!keepPlaying && isPlaying) { resumeOnForeground = true; pause() } }

@@ -100,10 +100,10 @@ private fun AdminDashboard(vm: AppViewModel, go: (String) -> Unit) {
             Mono("RESTAURATION")
             Spacer(Modifier.height(8.dp))
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                SoraButton("Restaurer les paramètres par défaut", { confirm = "Restaurer les paramètres ?" to { vm.restoreDefaultSettingsAdmin() } }, Modifier.fillMaxWidth())
+                SoraButton("Restaurer les paramètres par défaut", { confirm = "Restaurer les paramètres ?" to { vm.restoreDefaultSettingsAdmin(); Unit } }, Modifier.fillMaxWidth())
                 SoraButton("Restaurer les messages par défaut", { confirm = "Restaurer les messages ?" to { vm.restoreAllMessages() } }, Modifier.fillMaxWidth())
-                SoraButton("Restaurer les liens par défaut", { confirm = "Restaurer les liens ?" to { vm.restoreLinks() } }, Modifier.fillMaxWidth())
-                SoraButton("Restaurer le contenu initial", { confirm = "Restaurer pensées et vider la galerie ?" to { vm.restoreThoughts(); vm.clearGallery() } }, Modifier.fillMaxWidth())
+                SoraButton("Restaurer les liens par défaut", { confirm = "Restaurer les liens ?" to { vm.restoreLinks(); Unit } }, Modifier.fillMaxWidth())
+                SoraButton("Restaurer le contenu initial", { confirm = "Restaurer pensées et vider la galerie ?" to { vm.restoreThoughts(); vm.clearGallery(); Unit } }, Modifier.fillMaxWidth())
             }
         }
     }

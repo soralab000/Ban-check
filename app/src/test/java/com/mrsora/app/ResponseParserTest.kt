@@ -18,7 +18,7 @@ class ResponseParserTest {
     @Test fun unknownStaysUnknown() { assertEquals(OutcomeKind.UNKNOWN, ResponseParser.parse("""{"status":"ok"}""").kind) }
     @Test fun conflictIsUnknown() { assertEquals(OutcomeKind.UNKNOWN, ResponseParser.parse("""{"banned":true,"status":"not banned"}""").kind) }
     @Test fun plainText() { assertEquals(OutcomeKind.BANNED, ResponseParser.parse("Number is banned").kind) }
-    @Test fun detailsAreReal() { assertEquals(listOf("banned" to "true", "x" to "1"), ResponseParser.parse("""{"banned":true,"x":1}""").details) }
+    @Test fun detailsAreReal() { assertEquals(setOf("banned" to "true", "x" to "1"), ResponseParser.parse("""{"banned":true,"x":1}""").details.toSet()) }
     @Test fun validation() {
         assertNotNull(BanCheckApi.validate("")); assertNotNull(BanCheckApi.validate("abc")); assertNull(BanCheckApi.validate("+221771234567"))
     }

@@ -93,9 +93,9 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun setTextScale(v: Float): Boolean { if (!canEdit(Perm.VISUAL_SETTINGS)) return false; update { it.copy(textScale = v) }; return true }
     fun setSaveHistory(v: Boolean) = update { it.copy(saveHistory = v) }
     fun setVideoEnabled(v: Boolean) = update { it.copy(videoEnabled = v) }
-    fun setVolume(v: Float) { update { it.copy(volume = v) }; music.setVolume(v) }
-    fun setMuted(v: Boolean) { update { it.copy(muted = v) }; music.setMuted(v) }
-    fun setLoop(v: Boolean) { update { it.copy(loopAudio = v) }; music.setLoop(v) }
+    fun setVolume(v: Float) { update { it.copy(volume = v) }; music.changeVolume(v) }
+    fun setMuted(v: Boolean) { update { it.copy(muted = v) }; music.changeMuted(v) }
+    fun setLoop(v: Boolean) { update { it.copy(loopAudio = v) }; music.changeLoop(v) }
     fun setAudioBackground(v: Boolean) = update { it.copy(audioInBackground = v) }
 
     fun restoreUserSettings(): Boolean {
