@@ -3,7 +3,6 @@ package com.mrsora.app.network
 import com.mrsora.app.data.OutcomeKind
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
@@ -11,6 +10,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 enum class Reason(val label: String) {
@@ -32,8 +32,8 @@ class BanCheckApi {
     suspend fun check(number: String): CheckResult = withContext(Dispatchers.IO) {
         // Le numéro est envoyé tel que saisi (trim uniquement), comme demandé. Le format attendu par l'API
         // (avec/sans « + », indicatif) n'est pas documenté : à confirmer avec une vraie réponse.
-        val url = HttpUrl.Builder().scheme("https").host(HOST).addPathSegment("bancheck.php")
-            .addQueryParameter("numéro", number).build()
+        // URL = https://banchek-by-awais.kesug.com/bancheck.php?numéro=<NUMERO>  (le numéro est ajouté juste après le « = »)
+        val url = "https://$HOST/bancheck.php?num%C3%A9ro=" + URLEncoder.encode(number, "UTF-8")
         val req = Request.Builder().url(url).header("Accept", "application/json, text/plain, */*").build()
         try {
             client.newCall(req).execute().use { resp ->

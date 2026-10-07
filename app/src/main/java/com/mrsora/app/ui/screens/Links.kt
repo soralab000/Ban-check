@@ -28,7 +28,7 @@ fun LinksScreen(vm: AppViewModel) {
         item { SoraCard { Mono("IDENTITÉ"); Spacer(Modifier.height(6.dp)); H2(Brand.UNIVERSE); Spacer(Modifier.height(4.dp)); Body("${Brand.NAME} — ${Brand.SIGNATURE}", dim = true) } }
         items(vm.links, key = { it.id }) { l ->
             SoraCard {
-                if (l.imagePath != null) { ImageBox(l.imagePath, "VOTRE IMAGE", Modifier.fillMaxWidth().height(120.dp)); Spacer(Modifier.height(10.dp)) }
+                if (l.imagePath != null) { FullImage(l.imagePath, "VOTRE IMAGE", Modifier.fillMaxWidth()); Spacer(Modifier.height(10.dp)) }
                 H2(l.name)
                 if (l.description.isNotBlank()) Body(l.description, dim = true)
                 if (l.url.isNotBlank()) { Spacer(Modifier.height(4.dp)); Mono(l.url) }

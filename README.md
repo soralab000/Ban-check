@@ -19,3 +19,9 @@ Limite : tout est local à l'appareil. Pour contrôler les droits d'autres utili
 ## Vidéo par défaut
 Le workflow GitHub télécharge automatiquement https://files.catbox.moe/2nij2j.mp4 dans `app/src/main/assets/defaults/fond.mp4` avant de compiler.
 En local/Termux : `sh fetch_video.sh` puis `gradle assembleDebug`. Sans ce fichier, le fond reste simplement sombre.
+
+## Vidéo et musique par défaut (poids de l'APK)
+Dépose tes fichiers directement dans le repo :
+- `app/src/main/assets/defaults/fond.mp4` (vidéo d'arrière-plan)
+- `app/src/main/assets/defaults/musique.mp3` (musique, lancée à l'entrée du Manoir)
+La taille de l'APK = taille de ces fichiers + ~15 Mo d'app. Limite GitHub : 100 Mo par fichier.

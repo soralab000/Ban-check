@@ -26,7 +26,7 @@ fun GalleryScreen(vm: AppViewModel) {
         if (vm.gallery.isEmpty()) item { EmptyState("Le Manoir est encore silencieux.", "Ajoutez votre première image.") }
         items(vm.gallery, key = { it.id }) { g ->
             SoraCard {
-                ImageBox(g.imagePath, "VOTRE IMAGE", Modifier.fillMaxWidth().height(200.dp))
+                FullImage(g.imagePath, "VOTRE IMAGE", Modifier.fillMaxWidth())
                 Spacer(Modifier.height(10.dp)); H2(g.title)
                 if (g.description.isNotBlank()) { Spacer(Modifier.height(4.dp)); Body(g.description, dim = true) }
                 Row(verticalAlignment = Alignment.CenterVertically) {

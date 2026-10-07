@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 sealed interface CheckUi {
     object Idle : CheckUi
     object Loading : CheckUi
-    data class Done(val number: String, val result: CheckResult) : CheckUi
+    data class Done(val number: String, val result: CheckResult, val at: Long = System.currentTimeMillis()) : CheckUi
 }
 
 /**
@@ -36,7 +36,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val store = Store(ctx)
     private val api = BanCheckApi()
     val auth = AdminAuth(ctx)
-    val music = MusicController()
+    val music = MusicController(ctx)
 
     var settings by mutableStateOf(store.loadSettings())
         private set
@@ -97,6 +97,9 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun setMuted(v: Boolean) { update { it.copy(muted = v) }; music.changeMuted(v) }
     fun setLoop(v: Boolean) { update { it.copy(loopAudio = v) }; music.changeLoop(v) }
     fun setAudioBackground(v: Boolean) = update { it.copy(audioInBackground = v) }
+    fun setAutoplay(v: Boolean) = update { it.copy(autoplayMusic = v) }
+    /** Appelé quand l'utilisateur touche « Entrer » : lance la musique si le réglage est actif. */
+    fun onEnterManor() { if (settings.autoplayMusic && !music.isPlaying) music.play() }
 
     fun restoreUserSettings(): Boolean {
         if (!(canEdit(Perm.THEME_CHANGE) && canEdit(Perm.VISUAL_SETTINGS))) return false
@@ -131,8 +134,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     /** « Restaurer par défaut » = retirer le fichier perso : le placeholder élégant revient. */
     fun removeMedia(k: MediaKind): Boolean {
         if (!canEdit(permFor(k))) return false
-        val old = pathOf(k); setPath(k, when (k) { MediaKind.MANSION_IMAGE -> DefaultContent.MANSION; MediaKind.VIDEO -> DefaultContent.VIDEO; else -> null }); MediaFiles.delete(old)
-        if (k == MediaKind.AUDIO) music.load(null)
+        val old = pathOf(k); setPath(k, when (k) { MediaKind.MANSION_IMAGE -> DefaultContent.MANSION; MediaKind.VIDEO -> DefaultContent.VIDEO; MediaKind.AUDIO -> DefaultContent.AUDIO }); MediaFiles.delete(old)
+        if (k == MediaKind.AUDIO) music.load(DefaultContent.AUDIO)
         return true
     }
 

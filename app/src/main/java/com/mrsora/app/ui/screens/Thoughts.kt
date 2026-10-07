@@ -37,7 +37,7 @@ fun ThoughtsScreen(vm: AppViewModel) {
         if (vm.thoughts.isEmpty()) item { EmptyState("Aucune pensée n'a encore été déposée ici.", "Ajoutez la première.") }
         itemsIndexed(vm.thoughts, key = { _, t -> t.id }) { i, t ->
             SoraCard {
-                if (t.imagePath != null) { ImageBox(t.imagePath, "VOTRE IMAGE", Modifier.fillMaxWidth().height(170.dp)); Spacer(Modifier.height(12.dp)) }
+                if (t.imagePath != null) { FullImage(t.imagePath, "VOTRE IMAGE", Modifier.fillMaxWidth()); Spacer(Modifier.height(12.dp)) }
                 Mono("PENSÉE ${roman(i + 1)} · ${t.category.uppercase()}")
                 Spacer(Modifier.height(6.dp)); H2(t.title); Spacer(Modifier.height(6.dp)); Quote(t.text)
                 Spacer(Modifier.height(6.dp))

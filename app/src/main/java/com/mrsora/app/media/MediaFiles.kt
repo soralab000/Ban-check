@@ -24,12 +24,15 @@ object MediaFiles {
 }
 
 /** Lecteur audio indépendant de la vidéo. Pause en arrière-plan sauf si l'utilisateur l'autorise. */
-class MusicController {
+class MusicController(private val ctx: Context) {
     private var player: MediaPlayer? = null
     private var prepared = false
     private var wantPlay = false
     private var resumeOnForeground = false
     var isPlaying by mutableStateOf(false)
+        private set
+    /** true quand un fichier audio a été chargé avec succès. */
+    var available by mutableStateOf(false)
         private set
     var volume = 0.7f
     var muted = false
@@ -40,9 +43,11 @@ class MusicController {
         if (path == null) return
         val mp = MediaPlayer()
         try {
-            mp.setDataSource(path)
+            if (path.startsWith("asset:")) {
+                ctx.assets.openFd(path.removePrefix("asset:")).use { mp.setDataSource(it.fileDescriptor, it.startOffset, it.length) }
+            } else mp.setDataSource(path)
             mp.isLooping = loop
-            mp.setOnPreparedListener { prepared = true; applyVolume(); if (wantPlay) { it.start(); isPlaying = true } }
+            mp.setOnPreparedListener { prepared = true; available = true; applyVolume(); if (wantPlay) { it.start(); isPlaying = true } }
             mp.setOnCompletionListener { isPlaying = false; wantPlay = false }
             mp.setOnErrorListener { _, _, _ -> release(); true }
             player = mp
@@ -63,6 +68,6 @@ class MusicController {
 
     fun release() {
         runCatching { player?.release() }
-        player = null; prepared = false; wantPlay = false; isPlaying = false
+        player = null; prepared = false; wantPlay = false; isPlaying = false; available = false
     }
 }

@@ -68,11 +68,12 @@ class Store(ctx: Context) {
         mansionImage = p.getString("mansionImage", DefaultContent.MANSION),
         videoPath = p.getString("videoPath", DefaultContent.VIDEO),
         videoEnabled = p.getBoolean("videoEnabled", true),
-        audioPath = p.getString("audioPath", null),
+        audioPath = p.getString("audioPath", DefaultContent.AUDIO),
         volume = p.getFloat("volume", 0.7f),
         muted = p.getBoolean("muted", false),
         loopAudio = p.getBoolean("loopAudio", true),
-        audioInBackground = p.getBoolean("audioBg", false)
+        audioInBackground = p.getBoolean("audioBg", false),
+        autoplayMusic = p.getBoolean("autoplay", true)
     )
 
     fun saveSettings(s: AppSettings) {
@@ -80,7 +81,7 @@ class Store(ctx: Context) {
             .putBoolean("saveHistory", s.saveHistory).putFloat("textScale", s.textScale)
             .putString("mansionImage", s.mansionImage).putString("videoPath", s.videoPath).putBoolean("videoEnabled", s.videoEnabled)
             .putString("audioPath", s.audioPath).putFloat("volume", s.volume).putBoolean("muted", s.muted)
-            .putBoolean("loopAudio", s.loopAudio).putBoolean("audioBg", s.audioInBackground).apply()
+            .putBoolean("loopAudio", s.loopAudio).putBoolean("audioBg", s.audioInBackground).putBoolean("autoplay", s.autoplayMusic).apply()
     }
 
     fun loadThoughts() = p.getString("thoughts", null)?.let(Codec::thoughtsFromJson) ?: DefaultContent.thoughts

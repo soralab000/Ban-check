@@ -10,7 +10,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with: { gradle-version: "8.7" }
       - name: Télécharger la vidéo par défaut
-        run: curl -fL --retry 3 -o app/src/main/assets/defaults/fond.mp4 https://files.catbox.moe/2nij2j.mp4 || echo "Vidéo par défaut indisponible"
+        run: |
+          if [ ! -s app/src/main/assets/defaults/fond.mp4 ]; then
+            curl -fL --retry 3 -o app/src/main/assets/defaults/fond.mp4 https://files.catbox.moe/2nij2j.mp4 || echo "Vidéo par défaut indisponible"
+          fi
+          ls -lh app/src/main/assets/defaults/
       - run: gradle testDebugUnitTest assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with: { name: MrSora-debug-apk, path: app/build/outputs/apk/debug/*.apk }

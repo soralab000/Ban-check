@@ -47,19 +47,34 @@ fun IntroScreen(vm: AppViewModel, onEnter: () -> Unit) {
     val anim = LocalAnimations.current
     var shown by remember { mutableStateOf(false) }
     val a by animateFloatAsState(if (shown) 1f else 0f, tween(if (anim) 2200 else 0), label = "fade")
-    val zoom by animateFloatAsState(if (shown) 1.07f else 1f, tween(if (anim) 16000 else 0, easing = LinearEasing), label = "zoom")
+    val zoom by animateFloatAsState(if (shown) 1.0f else 0.96f, tween(if (anim) 2600 else 0, easing = LinearEasing), label = "zoom")
     LaunchedEffect(Unit) { shown = true }
+    val hasVideo = vm.settings.videoPath != null && vm.settings.videoEnabled
     Box(Modifier.fillMaxSize()) {
-        Box(Modifier.fillMaxSize().graphicsLayer { scaleX = zoom; scaleY = zoom; alpha = a }) {
-            ImageBox(vm.settings.mansionImage, "IMAGE DU MANOIR", Modifier.fillMaxSize(), RoundedCornerShape(0.dp))
+        if (!hasVideo) Box(Modifier.fillMaxSize().graphicsLayer { alpha = a * 0.35f }) {
+            ImageBox(vm.settings.mansionImage, "", Modifier.fillMaxSize(), RoundedCornerShape(0.dp))
         }
-        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, p.bg.copy(alpha = 0.55f), p.bg.copy(alpha = 0.96f)))))
-        Column(Modifier.align(Alignment.BottomCenter).padding(28.dp).navigationBarsPadding().alpha(a), horizontalAlignment = Alignment.CenterHorizontally) {
-            H1("Bienvenue dans le Manoir de Sora", center = true, size = 30)
-            Spacer(Modifier.height(10.dp))
-            Quote("« Entrez. Ici, le silence parle. »", center = true)
-            Spacer(Modifier.height(28.dp))
-            SoraButton("Entrer", onEnter, filled = true, modifier = Modifier.fillMaxWidth())
+        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, p.bg.copy(alpha = 0.5f), p.bg.copy(alpha = 0.92f)))))
+        Column(
+            Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        ) {
+            ImageBox(vm.settings.mansionImage, "IMAGE DU MANOIR",
+                Modifier.weight(1f, fill = false).fillMaxWidth().aspectRatio(1f).graphicsLayer { scaleX = zoom; scaleY = zoom; alpha = a },
+                RoundedCornerShape(18.dp), androidx.compose.ui.layout.ContentScale.Fit)
+            Column(Modifier.alpha(a), horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(Modifier.height(22.dp))
+                Text("BIENVENUE DANS LE", color = p.accent, fontFamily = Fonts.Ui, fontSize = 11.sp, letterSpacing = 4.sp)
+                Spacer(Modifier.height(8.dp))
+                Text("MANOIR", color = p.text, fontFamily = Fonts.Title, fontSize = 40.sp, letterSpacing = 8.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                Text("DE SORA", color = p.accent, fontFamily = Fonts.Title, fontSize = 40.sp, letterSpacing = 8.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                Spacer(Modifier.height(12.dp))
+                Box(Modifier.width(120.dp).height(1.5.dp).background(p.accent))
+                Spacer(Modifier.height(12.dp))
+                Quote("« Entrez. Ici, le silence parle. »", center = true)
+                Spacer(Modifier.height(22.dp))
+                SoraButton("Entrer dans le Manoir", onEnter, modifier = Modifier.fillMaxWidth())
+            }
         }
     }
 }

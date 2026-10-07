@@ -76,16 +76,18 @@ data class AppSettings(
     val mansionImage: String? = DefaultContent.MANSION,
     val videoPath: String? = DefaultContent.VIDEO,
     val videoEnabled: Boolean = true,
-    val audioPath: String? = null,
+    val audioPath: String? = DefaultContent.AUDIO,
     val volume: Float = 0.7f,
     val muted: Boolean = false,
     val loopAudio: Boolean = true,
-    val audioInBackground: Boolean = false
+    val audioInBackground: Boolean = false,
+    val autoplayMusic: Boolean = true
 )
 
 fun newId(): String = UUID.randomUUID().toString()
 
 object DefaultContent {
+    const val AUDIO = "asset:defaults/musique.mp3"
     const val VIDEO = "asset:defaults/fond.mp4"
     const val MANSION = "asset:defaults/manoir.jpg"
     private fun img(n: String) = "asset:defaults/$n.jpg"

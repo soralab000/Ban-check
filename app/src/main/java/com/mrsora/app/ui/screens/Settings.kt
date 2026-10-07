@@ -79,7 +79,7 @@ fun MediaSection(vm: AppViewModel, includeImage: Boolean = true, includeVideo: B
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (includeImage) {
             H2("Image du Manoir")
-            ImageBox(vm.settings.mansionImage, "IMAGE DU MANOIR", Modifier.fillMaxWidth().height(130.dp))
+            ImageBox(vm.settings.mansionImage, "IMAGE DU MANOIR", Modifier.fillMaxWidth().height(130.dp), scale = androidx.compose.ui.layout.ContentScale.Fit)
             MediaButtons(vm, Perm.MANSION_IMAGE, vm.settings.mansionImage.let { it != null && it != DefaultContent.MANSION }, pickImg) { vm.removeMedia(MediaKind.MANSION_IMAGE) }
         }
         if (includeVideo) {
@@ -90,14 +90,15 @@ fun MediaSection(vm: AppViewModel, includeImage: Boolean = true, includeVideo: B
         }
         if (includeAudio) {
             H2("Musique")
-            Body(if (vm.settings.audioPath != null) "Fichier audio personnalisé" else "VOTRE MUSIQUE", dim = true)
-            MediaButtons(vm, Perm.MANSION_MUSIC, vm.settings.audioPath != null, pickAud) { vm.removeMedia(MediaKind.AUDIO) }
-            if (vm.settings.audioPath != null) {
+            Body(if (vm.settings.audioPath.let { it != null && it != DefaultContent.AUDIO }) "Fichier audio personnalisé" else if (vm.music.available) "Musique par défaut" else "VOTRE MUSIQUE", dim = true)
+            MediaButtons(vm, Perm.MANSION_MUSIC, vm.settings.audioPath.let { it != null && it != DefaultContent.AUDIO }, pickAud) { vm.removeMedia(MediaKind.AUDIO) }
+            if (vm.music.available) {
                 SoraButton(if (vm.music.isPlaying) "Pause" else "Lecture", { vm.music.toggle() }, icon = if (vm.music.isPlaying) Icons.Outlined.Pause else Icons.Outlined.PlayArrow)
                 Body("Volume", dim = true)
                 Slider(vm.settings.volume, vm::setVolume, colors = SliderDefaults.colors(thumbColor = p.accent, activeTrackColor = p.accent, inactiveTrackColor = p.border))
                 SettingSwitch("Muet", vm.settings.muted, vm::setMuted)
                 SettingSwitch("Lecture en boucle", vm.settings.loopAudio, vm::setLoop)
+                SettingSwitch("Lancer la musique à l'entrée du Manoir", vm.settings.autoplayMusic, vm::setAutoplay)
                 SettingSwitch("Continuer en arrière-plan", vm.settings.audioInBackground, vm::setAudioBackground)
             }
         }
